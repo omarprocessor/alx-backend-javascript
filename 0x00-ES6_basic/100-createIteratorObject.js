@@ -3,11 +3,15 @@ export default function createIteratorObject(report) {
   let index = 0;
 
   return {
-    next: function () {
-      if (index < employees.length) {
-        return { value: employees[index++], done: false };
-      }
-      return { done: true };
-    },
+    [Symbol.iterator]: function() {
+      return {
+        next: function() {
+          if (index < employees.length) {
+            return { value: employees[index++], done: false };
+          }
+          return { done: true };
+        }
+      };
+    }
   };
 }
