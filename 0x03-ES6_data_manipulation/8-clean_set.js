@@ -1,12 +1,20 @@
 export default function cleanSet(set, startString) {
-  let result = '';
-  if (startString !== '') {
-    set.forEach((value) => {
-      if (value.startsWith(startString)) {
-        result += `${value.slice(startString.length)}-`;
-      }
-    });
-    return result.slice(0, -1); // Remove trailing hyphen
+  if (
+    !set && !startString && !(set instanceof Set) && typeof startString !== 'string'
+  ) {
+    return '';
   }
-  return result; // Return an empty string for an empty startString
+
+  const parts = [];
+
+  for (const value of set.values()) {
+    if (typeof value === 'string' && value.startsWith(startString)) {
+      const valueSubStr = value.substring(startString.length);
+
+      if (valueSubStr && valueSubStr !== value) {
+        parts.push(valueSubStr);
+      }
+    }
+  }
+  return parts.join('-');
 }
