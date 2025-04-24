@@ -1,9 +1,12 @@
-function cleanSet(set, startString) {
-  const result = [...set]
-    .filter((value) => value.startsWith(startString))
-    .map((value) => value.slice(startString.length))
-    .join('-');
-  return result;
+export default function cleanSet(set, startString) {
+  let result = '';
+  if (startString !== '') {
+    set.forEach((value) => {
+      if (value.startsWith(startString)) {
+        result += `${value.slice(startString.length)}-`;
+      }
+    });
+    return result.slice(0, -1); // Remove trailing hyphen
+  }
+  return result; // Return an empty string for an empty startString
 }
-
-module.exports = cleanSet;
