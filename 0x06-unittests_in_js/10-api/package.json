@@ -1,18 +1,15 @@
 {
 "name": "10-api",
 "version": "1.0.0",
-"description": "",
 "main": "api.js",
 "scripts": {
-  "test": "mocha"
+"test": "mocha"
 },
-"author": "",
-"license": "ISC",
 "dependencies": {
-  "express": "^4.17.1"
+"express": "^4.17.1"
 },
 "devDependencies": {
-  "mocha": "^8.0.0",
-  "supertest": "^6.0.0"
+"mocha": "^8.0.0",
+"supertest": "^4.0.2"
 }
 }
