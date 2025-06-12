@@ -1,61 +1,34 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
+const express = require('express')
+const app = express()
+const port = 7865
 
-const PORT = 4000;
+app.use(express.json())
 
-// Use body-parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Cart route with regex validation
-app.get('/cart/:id', (req, res) => {
-  const { id } = req.params;
-  if (!/^[0-9]+$/.test(id)) {
-    res.status(404).send('Not Found');
-    return;
-  }
-  res.send(`Payment methods for cart ${id}`);
-});
-
-// Available payment methods
-app.get('/available_payments', (req, res) => {
-  res.json({
-    payment_methods: {
-      credit_cards: true,
-      paypal: false,
-    },
-  });
-});
-
-// Login endpoint
-app.post('/login', (req, res) => {
-  const { userName } = req.body;
-  res.send(`Welcome ${userName}`);
-});
-
-// Root route
 app.get('/', (req, res) => {
-  res.send('Welcome to the payment system');
-});
+ res.send('Welcome to the payment system')
+})
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).send('Not Found');
-});
+app.get('/cart/:id(\\d+)', (req, res) => {
+ const id = req.params.id
+ res.send(`Payment methods for cart ${id}`)
+})
 
-// Error handler
-app.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+app.get('/available_payments', (req, res) => {
+ res.json({
+   payment_methods: {
+     credit_cards: true,
+     paypal: false
+   }
+ })
+})
 
-module.exports = app;
+app.post('/login', (req, res) => {
+ const { userName } = req.body
+ res.send(`Welcome ${userName}`)
+})
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`API available on localhost port ${PORT}`);
-  });
-}
+app.listen(port, () => {
+ console.log(`API available on localhost port ${port}`)
+})
 
-module.exports = app;
+module.exports = app
