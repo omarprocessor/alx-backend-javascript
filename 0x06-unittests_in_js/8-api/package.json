@@ -1,10 +1,15 @@
 {
   "name": "8-api",
   "version": "1.0.0",
-  "description": "API testing",
-  "main": "api.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha api.test.js"
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",

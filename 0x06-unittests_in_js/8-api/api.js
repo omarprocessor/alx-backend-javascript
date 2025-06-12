@@ -1,19 +1,14 @@
-const express = require('express');
-const app = express();
+const express = require('express')
 
-const PORT = 4000;
-
-app.listen(PORT, () => {
-  console.log(`API available on localhost port ${PORT}`);
-});
+const app = express()
+const port = 7865
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the payment system');
-});
+ res.send('Welcome to the payment system')
+})
 
-app.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+app.listen(port, () => {
+ console.log(`API available on localhost port ${port}`)
+})
 
-module.exports = app;
+module.exports = app
