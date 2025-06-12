@@ -2,25 +2,20 @@ const request = require('request');
 const { expect } = require('chai');
 const app = require('./api');
 
-describe('API Tests', () => {
-  let server;
-  let baseUrl;
+const baseUrl = 'http://localhost:7865';
 
-  before((done) => {
-    server = app.listen(0, () => {
-      baseUrl = `http://localhost:${server.address().port}`;
-      done();
-    });
+describe('API Tests', () => {
+  before(() => {
+    app.listen(7865);
   });
 
-  after((done) => {
-    server.close(done);
+  after(() => {
+    app.close();
   });
 
   describe('GET /', () => {
     it('should return "Welcome to the payment system"', (done) => {
       request.get(`${baseUrl}/`, (err, res, body) => {
-        if (err) return done(err);
         expect(res.statusCode).to.equal(200);
         expect(body).to.equal('Welcome to the payment system');
         done();
@@ -29,18 +24,16 @@ describe('API Tests', () => {
   });
 
   describe('GET /cart/:id', () => {
-    it('should return payment methods for valid cart id', (done) => {
-      request.get(`${baseUrl}/cart/47`, (err, res, body) => {
-        if (err) return done(err);
+    it('should return "Payment methods for cart 123" when :id is a number', (done) => {
+      request.get(`${baseUrl}/cart/123`, (err, res, body) => {
         expect(res.statusCode).to.equal(200);
-        expect(body).to.equal('Payment methods for cart 47');
+        expect(body).to.equal('Payment methods for cart 123');
         done();
       });
     });
 
-    it('should return 404 for invalid cart id', (done) => {
+    it('should return 404 when :id is not a number', (done) => {
       request.get(`${baseUrl}/cart/hello`, (err, res) => {
-        if (err) return done(err);
         expect(res.statusCode).to.equal(404);
         done();
       });
@@ -48,9 +41,8 @@ describe('API Tests', () => {
   });
 
   describe('GET /available_payments', () => {
-    it('should return available payment methods', (done) => {
+    it('should return correct payment methods', (done) => {
       request.get(`${baseUrl}/available_payments`, (err, res, body) => {
-        if (err) return done(err);
         expect(res.statusCode).to.equal(200);
         const expected = {
           payment_methods: {
@@ -65,26 +57,26 @@ describe('API Tests', () => {
   });
 
   describe('POST /login', () => {
-    it('should welcome user with provided name', (done) => {
-      request.post({
+    it('should return "Welcome Betty" when userName is provided', (done) => {
+      const options = {
         url: `${baseUrl}/login`,
-        json: true,
-        body: { userName: 'Betty' }
-      }, (err, res, body) => {
-        if (err) return done(err);
+        method: 'POST',
+        json: { userName: 'Betty' },
+      };
+      request(options, (err, res, body) => {
         expect(res.statusCode).to.equal(200);
         expect(body).to.equal('Welcome Betty');
         done();
       });
     });
 
-    it('should welcome anonymous user when no name provided', (done) => {
-      request.post({
+    it('should return "Welcome " if no userName is provided', (done) => {
+      const options = {
         url: `${baseUrl}/login`,
-        json: true,
-        body: {}
-      }, (err, res, body) => {
-        if (err) return done(err);
+        method: 'POST',
+        json: {},
+      };
+      request(options, (err, res, body) => {
         expect(res.statusCode).to.equal(200);
         expect(body).to.equal('Welcome ');
         done();
